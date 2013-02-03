@@ -1,0 +1,4 @@
+jqhomematic
+===========
+
+jQuery HomeMatic Plugin
