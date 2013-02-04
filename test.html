@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>jqhomematic test</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jqhomematic.js"></script>
+    <script type="text/javascript">
+(function ($) {
+    $(document).ready(function () {
+
+
+
+        $("body").homematic({
+           ccu:             "172.16.23.3",
+           updateInterval:  3000
+        });
+
+
+    });
+})(jQuery);
+
+    </script>
+
+</head>
+<body>
+
+<button data-hm-id="1111" data-hm-value="true">Test</button><br>
+<input name="test-sysvar1" type="text" data-hm-id="12345"/>
+<input name="test-sysvar1" type="text" data-hm-id="555"/>
+<input name="test-sysvar1" type="text" data-hm-id="888"/>
+<input name="test-sysvar1" type="text" data-hm-id=""/>
+<input name="test-sysvar1" type="text" /><br>
+<select name="test-select" data-hm-id="123">
+    <option value="1">eins</option>
+    <option value="2">zwei</option>
+</select>
+</body>
+</html>
