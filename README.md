@@ -34,7 +34,7 @@ Optionen
 ========
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
-| ccu       | IP-Adresse oder Hostname der CCU              | ""          |
+| ccu       | IP-Adresse oder Hostname der CCU (Kann leer bleiben wenn die Webseite auf der CCU selbst installiert ist)             | ""          |
 | updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
 | autoStart | Automatische Updates durchführen | true |
 | formatter | Funktion zum Formatieren der Werte, erhält den Wert als Parameter | undefined |
