@@ -55,10 +55,10 @@ Methoden
 
 | Methode    | Beschreibung   |
 | --------- | ------------- |
-| set          | Einen Homematic-Datenpunkt setzen               |
-| update          | Update aller Datenpunkte anstoﬂen              |
-| destroy   | Plugin beenden, alle Event-Handler werden entfernt  |
-| stop | Automatische Updates beenden |
+| set          | Einen Homematic-Datenpunkt setzen, erwartet zwei Parameter: die ID und den Wert               |
+| update          | Ein Update aller Werte anstoﬂen          |
+| destroy   | Plugin entfernen, automatische Updates werden angehalten, alle Event-Handler werden entfernt  |
+| stop | Automatische Updates stoppen |
 | start | Automatische Updates starten |
 
 Data-Attribute
@@ -66,9 +66,9 @@ Data-Attribute
 | Attribut    | Beschreibung   |
 | --------- | ------------- |
 | data-hm-id | Die ID eines Datenpunkts |
-| data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts |
-| data-hm-type | "PROGRAM" - Notwendig bei Programmen |
-
+| data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) |
+| data-hm-type | "PROGRAM" - Angabe nur notwendig bei Programmen |
+| data-hm-value | |
 
 Roadmap
 =======
