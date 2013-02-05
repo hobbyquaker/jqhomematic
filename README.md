@@ -1,8 +1,11 @@
-jqhomematic
-===========
-
 jQuery HomeMatic Plugin
+=======================
 
+Dieses Plugin verbindet HTML-Elemente (z.B. INPUT, SELECT, ...) mit HomeMatic-Geräten/Variablen/Programmen. Es werden entsprechende Events an die Elemente gebunden um die HomeMatic-Geräte zu steuern, außerdem ist ein automatischer Update-Mechanismus implementiert der alle Elemente aktualisert wenn sich der Wert des zugeordneten HomeMatic-Datenpunkts ändert.
+
+Es ist also mit diesem Plugin möglich sich individuelle Webfrontends für die CCU zu bauen - ohne sich mit den CCU Internas und HomeMatic-Script zu beschäftigen, es sind lediglich HTML und Javascript/jQuery Kenntnisse erforderloch. Man ist auf kein bestimmtes UI Framework festgelegt, dieses Plugin soll universell einsetzbar sein, egal ob mit jQuery Mobile, jQueryUI, KendoUI oder sonstigen UI-Frameworks.
+
+Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Release der Version "1.0" gegen Ende März/Anfang April 2013.
 
 Verwendung
 ==========
@@ -36,9 +39,9 @@ Events
 ======
 | Event     | Beschreibung   |
 | --------- | ------------- |
-| initcomplete          |               |
-| updatestart          |               |
-| updatedone          |               |
+| initcomplete          | Wird aufgerufen sobald sich das HomeMatic Plugin vollständig initialisiert hat              |
+| updatestart          | Wird aufgerufen wenn eine Update-Anfrage an die CCU gestellt wird              |
+| updatedone          | Wird aufgerufen wenn eine Update-Anfrage von der CCU beantwortet wurde              |
 
 
 Methoden
@@ -47,8 +50,8 @@ Methoden
 | Methode    | Beschreibung   |
 | --------- | ------------- |
 | set          | Einen Homematic-Datenpunkt setzen               |
-| update          |               |
-| destroy   |   |
+| update          | Update aller Datenpunkte anstoßen              |
+| destroy   | Plugin beenden, alle Event-Handler werden entfernt  |
 | stop | Automatische Updates beenden |
 | start | Automatische Updates starten |
 
@@ -65,7 +68,7 @@ Copyright, Lizenz, Bedingungen
 
 jQuery HomeMatic Plugin
 
-Copyright (c) 2012, 2013 hobbyquaker https://github.com/hobbyquaker
+Copyright (c) 2013 hobbyquaker https://github.com/hobbyquaker
 
 This software is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License Version 3 as published by the Free Software Foundation.
 
