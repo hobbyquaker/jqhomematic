@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir -p /mnt
+mount -t yaffs /dev/mtdblock3 /mnt
+
+cp -R ./jqhm /mnt/etc/config/addons/www/
+cp ./jqhomematic /mnt/etc/config/rc.d
+chmod +x /mnt/etc/config/rc.d/jqhomematic
+
+umount /mnt

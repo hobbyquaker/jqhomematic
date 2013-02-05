@@ -5,7 +5,7 @@ Dieses Plugin verbindet HTML-Elemente (z.B. INPUT, SELECT, ...) mit HomeMatic-Ge
 
 Es ist also mit diesem Plugin möglich sich individuelle Webfrontends für die CCU zu bauen - ohne sich mit den CCU Internas und HomeMatic-Script zu beschäftigen, es sind lediglich HTML und Javascript/jQuery Kenntnisse erforderlich. Man ist auf kein bestimmtes UI Framework festgelegt, dieses Plugin ist universell einsetzbar, egal ob mit jQuery Mobile, jQueryUI, KendoUI oder sonstigen UI-Frameworks.
 
-Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Release der Version "1.0" gegen Ende März/Anfang April 2013.
+Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Release der Version "1.0" gegen Ende Ende Februar 2013.
 
 Verwendung
 ==========
@@ -21,12 +21,18 @@ Webpage anlegen, jQuery und das HomeMatic Plugin einbinden:
 
 Elemente mit den Homematic data-Attributen versehen:
 ```html
-<input name="test-sysvar1" type="text" data-hm-id="12345"/>
+<input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
 ```
-Das Plugin initialisieren
+
+
 ```javascript
-$("body").homematic({
-  ccu:             "172.16.23.3"
+$("#test-input").homematic();
+```
+
+Verbindung zur CCU starten
+```javascript
+$.fn.homematic("connect", {
+  ccu: '192.168.1.99'
 });
 ```
 Die initialisierung ist auf allen HTML-Elementen möglich. Das Plugin durchsucht alle Kind-Elemente nach Vorkommnissen des Attributes data-hm-id.
@@ -40,6 +46,7 @@ Optionen
 | updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
 | autoStart | Automatische Updates durchführen | true |
 | formatter | Funktion zum Formatieren der Werte, erhält den Wert als Parameter | undefined |
+| debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
 
 Events
 ======
@@ -60,6 +67,7 @@ Methoden
 | destroy   | Plugin entfernen, automatische Updates werden angehalten, alle Event-Handler werden entfernt  |
 | stop | Automatische Updates stoppen |
 | start | Automatische Updates starten |
+| script | Ein Script ausführen, erwartet das Script als Parameter |
 
 Data-Attribute
 ==============

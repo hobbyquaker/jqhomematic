@@ -1,8 +1,8 @@
 #!/bin/tclsh
 
 #
-#   hmscript_na.cgi Version 1.0
-#   Ausführen eines Homematic Scripts
+#   hmscript.cgi Version 1.0
+#   Ausführen eines Homematic Scripts, für die Verwendung mit dem jQuery HomeMatic Plugin
 #   2'2013 https://github.com/hobbyquaker
 #
 #   Erwartet ein Homematic Script als POST Daten
@@ -51,4 +51,4 @@ set postdata [utf8-decode [read stdin]]
 
 array set script_result [rega_script $postdata]
 
-puts $script_result(STDOUT)
+puts -nonewline $script_result(STDOUT)

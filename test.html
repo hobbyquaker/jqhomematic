@@ -10,14 +10,17 @@
 (function ($) {
     $(document).ready(function () {
 
-
-
-        $("body").homematic({
-           ccu:             "172.16.23.3",
-           updateInterval:  3000
+        $.fn.homematic("connect", {
+            ccu : "172.16.23.3"
         });
 
+        $("*[data-hm-id]").homematic();
 
+        /*
+        $.fn.homematic('script', 'object o = dom.GetObject("Licht Ankleide").DPByHssDP("LEVEL");\nWrite(o.Value());', function(data) {
+            alert(data);
+        });
+        */
 
     });
 })(jQuery);
@@ -27,13 +30,9 @@
 </head>
 <body>
 
-<button data-hm-id="1111" data-hm-value="true">Test</button><br>
-<input name="test-sysvar1" type="text" data-hm-id="12345"/>
-<input name="test-sysvar1" type="text" data-hm-id="555"/>
-<input name="test-sysvar1" type="text" data-hm-id="888"/>
-<input name="test-sysvar1" type="text" data-hm-id=""/>
-<input name="test-sysvar1" type="text" /><br>
-<select name="test-select" data-hm-id="123">
+<input name="test-sysvar1" type="text" data-hm-id="1349"/>
+
+<select name="test-select" data-hm-id="950">
     <option value="1">eins</option>
     <option value="2">zwei</option>
 </select>

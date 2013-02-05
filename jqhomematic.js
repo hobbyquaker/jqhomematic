@@ -15,85 +15,116 @@
  */
 
 
-
-Array.prototype.remove = function(from, to) {
-    var rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
-};
-
 (function ($) {
 
-    var rootElements, homematicReady = false;
+    var homematicReady = false,
+        settings,
+        hmObjects = {},
 
-    var hmObjects = [];
+        methods = {
+            connect : function ( options ) {
+                console.log("connect");
+                if (settings == undefined) {
+                    settings = $.extend({
+                        'ccu':          undefined,
+                        'api':          '/addons/jqhm/hmscript.cgi',
+                        'protocol':     'http',
+                        'debug':        false
+                    }, options);
 
-    var methods = {
-        init : function( options ) {
-            console.log("init");
-            console.log(options);
-            console.log(this);
-            rootElements = this;
-            homematicReady = true;
-            this.each(function() {
-                $(this).find("*[data-hm-id]").each(function () {
-                    var element =   $(this),
-                        tag =       element.prop('tagName'),
-                        type,
-                        id =        element.attr("data-hm-id"),
-                        value =     element.attr("data-hm-value");
-                    if (id != "") {
-                        console.log(" hm-id=" + id);
-
-                        hmAddObject(id);
-
-                        switch (tag) {
-                            case "INPUT":
-                                element.bind("change.homematic", function () {
-                                    hmSet(id, element.val());
-                                });
-
-                                break;
-                            case "TEXTAREA":
-                                element.bind("change.homematic", function () {
-                                    hmSet(id, element.text());
-
-                                });
-                                break;
-                            case "BUTTON":
-                                element.bind("click.homematic", function () {
-                                    hmSet(id, value);
-
-                                });
-                                break;
-                            case "SELECT":
-                                element.bind("change.homematic", function () {
-                                    hmSet(id, element.find('option:selected').val());
-
-                                });
-                                break;
-                            default:
-                            // jQuery UI Slider
-
-                            // KendoUI Slider
-
-                            // jQuery Mobile Slider
-                        }
+                    if (options.debug) { console.log("jqhomematic: debug"); }
+                    if (settings.ccu) {
+                        settings.url = settings.protocol + "://" + settings.ccu + settings.api;
+                    } else {
+                        settings.url = settings.api;
                     }
+                }
+                methods.script('Write("ok");', function (data) { alert("connect " + data); }, function () { alert("connect failed"); });
+            },
+            init : function( options ) {
+                console.log("init");
+                homematicReady = true;
+
+
+                this.each(function() {
+
+                        var obj = $(this);
+                        var element = $.extend({
+                            'obj':      obj,
+                            tag :       obj.prop( 'tagName' ),
+                            type :      obj.attr( 'type' ),
+                            id :        obj.attr( 'data-hm-id' ),
+                            value :     obj.attr( 'data-hm-value' )
+                        }, options);
+
+
+                        
+                        if ( element.id > 0 ) {
+                            if (hmObjects["hm"+element.id]) {
+                                $.error( 'Trying to initialize already initialized element' );
+                            }
+                            hmObjects["hm"+element.id] = element;
+
+                            switch ( element.tag ) {
+                                case "INPUT":
+                                    element.obj.bind( "change.homematic" , function () {
+                                        hmSet(element.id, element.obj.val());
+                                    });
+
+                                    break;
+                                case "TEXTAREA":
+                                    element.obj.bind("change.homematic", function () {
+                                        hmSet(element.id, element.obj.text());
+
+                                    });
+                                    break;
+                                case "BUTTON":
+                                    element.obj.bind("click.homematic", function () {
+                                        hmSet(element.id, value);
+
+                                    });
+                                    break;
+                                case "SELECT":
+                                    element.obj.bind("change.homematic", function () {
+                                        hmSet(element.id, element.obj.find('option:selected').val());
+
+                                    });
+                                    break;
+                                default:
+                                // jQuery UI Slider
+
+                                // KendoUI Slider
+
+                                // jQuery Mobile Slider
+                            }
+                        }
+
 
 
                 });
-            });
-            console.log("objects: " + hmObjects);
-            return this;
+                console.log(hmObjects);
+                return this;
 
-        },
-        update: function (args) {
-            console.log("update");
-            console.log(options);
-            console.log(this);
-        },
-        destroy: function () {
+            },
+            script: function (script, success, error) {
+                if (settings.debug) {
+                    console.log(script);
+                }
+                $.ajax({
+                    url: settings.url,
+                    type: "POST",
+                    dataType: "text",
+                    data: script,
+                    success: success,
+                    error: error
+                });
+            },
+            update: function (args) {
+                console.log("update");
+                console.log(options);
+                console.log(this);
+            },
+            destroy: function () {
             return this.each(function() {
                 $(this).find("*[data-hm-id]").each(function () {
                     var element =   $(this),
@@ -119,8 +150,8 @@ Array.prototype.remove = function(from, to) {
     }
 
     var hmAddObject = function (id) {
-        if (hmObjects.indexOf(id) == -1) {
-            hmObjects.push(id);
+        if (!hmObjects["hm"+id]) {
+            hmObjects["hm"+id] = {};
         }
     };
 
@@ -137,6 +168,8 @@ Array.prototype.remove = function(from, to) {
             $.error( 'Method ' +  method + ' does not exist on jQuery.homematic' );
         }
     }
+
+
 
 
 
