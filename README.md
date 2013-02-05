@@ -7,16 +7,21 @@ jQuery HomeMatic Plugin
 Usage
 =====
 jQuery und das HomeMatic Plugin einbinden:
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script type="text/javascript" src="jqhomematic.js"></script>
+```html
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="jqhomematic.js"></script>
+```
 
 Elemente mit den Homematic data-Attributen versehen:
-  <input name="test-sysvar1" type="text" data-hm-id="12345"/>
-
+```html
+<input name="test-sysvar1" type="text" data-hm-id="12345"/>
+```
 Das Plugin initialisieren
-  $("body").homematic({
-    ccu:             "172.16.23.3"
-  });
+```javascript
+$("body").homematic({
+  ccu:             "172.16.23.3"
+});
+```
 
 Options
 =======
