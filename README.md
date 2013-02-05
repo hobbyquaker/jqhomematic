@@ -35,18 +35,13 @@ $.fn.homematic("connect", {
   ccu: '192.168.1.99'
 });
 ```
-Die initialisierung ist auf allen HTML-Elementen möglich. Das Plugin durchsucht alle Kind-Elemente nach Vorkommnissen des Attributes data-hm-id.
-
 
 Optionen
 ========
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
-| ccu       | IP-Adresse oder Hostname der CCU (Kann leer bleiben wenn die Webseite auf der CCU selbst installiert ist)             | ""          |
-| updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
-| autoStart | Automatische Updates durchführen | true |
-| formatter | Funktion zum Formatieren der Werte, erhält den Wert als Parameter | undefined |
-| debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
+| | | |
+
 
 Events
 ======
@@ -62,12 +57,24 @@ Methoden
 
 | Methode    | Beschreibung   |
 | --------- | ------------- |
+| connect | |
 | set          | Einen Homematic-Datenpunkt setzen, erwartet zwei Parameter: die ID und den Wert               |
 | update          | Ein Update aller Werte anstoßen          |
 | destroy   | Plugin entfernen, automatische Updates werden angehalten, alle Event-Handler werden entfernt  |
 | stop | Automatische Updates stoppen |
 | start | Automatische Updates starten |
 | script | Ein Script ausführen, erwartet das Script als Parameter |
+
+Connect Optionen
+----------------
+| Option    | Beschreibung   | Default   |
+| --------- | ------------- | --------- |
+| ccu       | IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
+| updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
+| autoStart | Automatische Updates durchführen | true |
+| formatter | Funktion zum Formatieren der Werte, erhält den Wert als Parameter | undefined |
+| debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
+
 
 Data-Attribute
 ==============
