@@ -9,7 +9,11 @@ Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Re
 
 Verwendung
 ==========
-jQuery und das HomeMatic Plugin einbinden:
+Das Plugin benötigt zum Zugriff auf das HomeMatic-System eine Zusatzsoftware auf der CCU. Hierzu über die Systemsteuerung-Zusatzsoftware hq-api_1.0.tar.gz installieren. Achtung: Diese Zusatzsoftware eröffnet jedem der Zugriff auf Port 80 (http) der CCU hat die Möglichkeit HomeMatic-Scripte ohne weitere Authentifizierung durchzuführen.
+
+
+
+Webpage anlegen, jQuery und das HomeMatic Plugin einbinden:
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="jqhomematic.js"></script>
@@ -60,7 +64,13 @@ Data-Attribute
 | Attribut    | Beschreibung   |
 | --------- | ------------- |
 | data-hm-id | Die ID eines Datenpunkts |
+| data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts |
+| data-hm-type | "PROGRAM" - Notwendig bei Programmen |
 
+
+Roadmap
+=======
+* API Alternativ mit Authentifizierung anbieten
 
 
 Copyright, Lizenz, Bedingungen
