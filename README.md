@@ -9,7 +9,7 @@ Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Re
 
 Verwendung
 ==========
-Das Plugin benötigt zum Zugriff auf das HomeMatic-System eine Zusatzsoftware auf der CCU. Hierzu über die Systemsteuerung-Zusatzsoftware hq-api_1.0.tar.gz installieren. Achtung: Diese Zusatzsoftware eröffnet jedem der Zugriff auf Port 80 (http) der CCU hat die Möglichkeit HomeMatic-Scripte ohne weitere Authentifizierung durchzuführen.
+Das Plugin benötigt zum Zugriff auf das HomeMatic-System eine Zusatzsoftware auf der CCU. Hierzu über die Systemsteuerung-Zusatzsoftware jqhm_1.0.tar.gz installieren. Achtung: Diese Zusatzsoftware eröffnet jedem der Zugriff auf Port 80 (http) der CCU hat die Möglichkeit HomeMatic-Scripte ohne weitere Authentifizierung durchzuführen.
 
 
 

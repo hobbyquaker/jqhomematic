@@ -19,7 +19,7 @@
 
     var homematicReady = false,
         settings,
-        hmObjects = {},
+        hmObjects = [],
 
         methods = {
             connect : function ( options ) {
@@ -50,43 +50,42 @@
 
                         var obj = $(this);
                         var element = $.extend({
-                            'obj':      obj,
-                            tag :       obj.prop( 'tagName' ),
-                            type :      obj.attr( 'type' ),
-                            id :        obj.attr( 'data-hm-id' ),
-                            value :     obj.attr( 'data-hm-value' )
+                            'obj':          obj,
+                            tag :           obj.prop( 'tagName' ),
+                            type :          obj.attr( 'type' ),
+                            id :            obj.attr( 'data-hm-id' ),
+                            value :         obj.attr( 'data-hm-value' ),
+                            refresh :   true
                         }, options);
 
-
-                        
                         if ( element.id > 0 ) {
-                            if (hmObjects["hm"+element.id]) {
+                          /*  if (hmObjects["hm"+element.id]) {
                                 $.error( 'Trying to initialize already initialized element' );
-                            }
-                            hmObjects["hm"+element.id] = element;
+                            }*/
+                            hmObjects.push(element);
 
                             switch ( element.tag ) {
                                 case "INPUT":
                                     element.obj.bind( "change.homematic" , function () {
-                                        hmSet(element.id, element.obj.val());
+                                        methods.state(element.id, element.obj.val());
                                     });
 
                                     break;
                                 case "TEXTAREA":
                                     element.obj.bind("change.homematic", function () {
-                                        hmSet(element.id, element.obj.text());
+                                        methods.state(element.id, element.obj.text());
 
                                     });
                                     break;
                                 case "BUTTON":
                                     element.obj.bind("click.homematic", function () {
-                                        hmSet(element.id, value);
+                                        methods.state(element.id, value);
 
                                     });
                                     break;
                                 case "SELECT":
                                     element.obj.bind("change.homematic", function () {
-                                        hmSet(element.id, element.obj.find('option:selected').val());
+                                        methods.state(element.id, element.obj.find('option:selected').val());
 
                                     });
                                     break;
@@ -118,6 +117,9 @@
                     success: success,
                     error: error
                 });
+            },
+            state: function(id, value) {
+                methods.script("dom.GetObject("+id+").State("+value+")");
             },
             update: function (args) {
                 console.log("update");
@@ -155,9 +157,6 @@
         }
     };
 
-    var hmSet = function(id, value) {
-        console.log("hmSet("+id+", "+value+")");
-    };
 
     $.fn.homematic = function( method ) {
         if ( methods[method] ) {
