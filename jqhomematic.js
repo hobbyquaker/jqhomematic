@@ -20,7 +20,7 @@
     var homematicReady = false,
         settings,
         hmObjects = [],
-
+        refreshScript = "",
         methods = {
             connect : function ( options ) {
                 console.log("connect");
@@ -39,7 +39,7 @@
                         settings.url = settings.api;
                     }
                 }
-                methods.script('Write("ok");', function (data) { alert("connect " + data); }, function () { alert("connect failed"); });
+                buildRefreshScript();
             },
             init : function( options ) {
                 console.log("init");
@@ -54,48 +54,16 @@
                             tag :           obj.prop( 'tagName' ),
                             type :          obj.attr( 'type' ),
                             id :            obj.attr( 'data-hm-id' ),
+                            wid :           obj.attr( 'data-hm-wid' ),
                             value :         obj.attr( 'data-hm-value' ),
-                            refresh :   true
+                            refresh :       true
                         }, options);
 
                         if ( element.id > 0 ) {
-                          /*  if (hmObjects["hm"+element.id]) {
-                                $.error( 'Trying to initialize already initialized element' );
-                            }*/
+
                             hmObjects.push(element);
+                            buildRefreshScript();
 
-                            switch ( element.tag ) {
-                                case "INPUT":
-                                    element.obj.bind( "change.homematic" , function () {
-                                        methods.state(element.id, element.obj.val());
-                                    });
-
-                                    break;
-                                case "TEXTAREA":
-                                    element.obj.bind("change.homematic", function () {
-                                        methods.state(element.id, element.obj.text());
-
-                                    });
-                                    break;
-                                case "BUTTON":
-                                    element.obj.bind("click.homematic", function () {
-                                        methods.state(element.id, value);
-
-                                    });
-                                    break;
-                                case "SELECT":
-                                    element.obj.bind("change.homematic", function () {
-                                        methods.state(element.id, element.obj.find('option:selected').val());
-
-                                    });
-                                    break;
-                                default:
-                                // jQuery UI Slider
-
-                                // KendoUI Slider
-
-                                // jQuery Mobile Slider
-                            }
                         }
 
 
@@ -121,11 +89,6 @@
             state: function(id, value) {
                 methods.script("dom.GetObject("+id+").State("+value+")");
             },
-            update: function (args) {
-                console.log("update");
-                console.log(options);
-                console.log(this);
-            },
             destroy: function () {
             return this.each(function() {
                 $(this).find("*[data-hm-id]").each(function () {
@@ -134,15 +97,21 @@
                         type,
                         id =        element.attr("data-hm-id"),
                         value =     element.attr("data-hm-value");
-
                     console.log(" hm-id=" + id);
-
-                    element.unbind(".homematic");
-
                 });
             });
         }
     };
+
+    var buildRefreshScript = function () {
+        var DPs = {};
+        for (var i = 0; i < hmObjects.length; i++) {
+            DPs["hm"+hmObjects[i].id] = hmObjects[i];
+        }
+        for (var key in DPs) {
+
+        }
+    }
 
     var hmUpdate = function(elements) {
         if (elements === undefined) {

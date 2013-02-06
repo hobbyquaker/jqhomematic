@@ -1,11 +1,6 @@
 jQuery HomeMatic Plugin
 =======================
 
-Dieses Plugin verbindet HTML-Elemente (z.B. INPUT, SELECT, ...) mit HomeMatic-Geräten/Variablen/Programmen. Es werden entsprechende Events an die Elemente gebunden um die HomeMatic-Geräte zu steuern, außerdem ist ein automatischer Update-Mechanismus implementiert der alle Elemente aktualisert wenn sich der Wert des zugeordneten HomeMatic-Datenpunkts ändert.
-
-Es ist also mit diesem Plugin möglich sich individuelle Webfrontends für die CCU zu bauen - ohne sich mit den CCU Internas und HomeMatic-Script zu beschäftigen, es sind lediglich HTML und Javascript/jQuery Kenntnisse erforderlich. Man ist auf kein bestimmtes UI Framework festgelegt, dieses Plugin ist universell einsetzbar, egal ob mit jQuery Mobile, jQueryUI, KendoUI oder sonstigen UI-Frameworks.
-
-Im Moment befindet sich die Entwicklung noch ganz am Anfang - geplant ist der Release der Version "1.0" gegen Ende Ende Februar 2013.
 
 Verwendung
 ==========
@@ -13,24 +8,20 @@ Das Plugin benötigt zum Zugriff auf das HomeMatic-System eine Zusatzsoftware auf
 
 
 
-Webpage anlegen, jQuery und das HomeMatic Plugin einbinden:
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="jqhomematic.js"></script>
-```
+<script type="text/javascript" src="jqhomematic.min.js"></script>
 
-Elemente mit den Homematic data-Attributen versehen:
-```html
 <input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
 ```
 
-
 ```javascript
 $("#test-input").homematic();
-```
 
-Verbindung zur CCU starten
-```javascript
+$("#test-input").change(function() {
+  $.fn.homematic("state", $(this).val());
+});
+
 $.fn.homematic("connect", {
   ccu: '192.168.1.99'
 });
