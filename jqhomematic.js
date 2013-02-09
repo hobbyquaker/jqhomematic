@@ -17,88 +17,111 @@
 
 (function ($) {
 
-    var homematicReady = false,
-        settings,
-        hmObjects = [],
-        refreshScript = "",
-        methods = {
-            connect : function ( options ) {
-                console.log("connect");
-                if (settings == undefined) {
-                    settings = $.extend({
-                        'ccu':          undefined,
-                        'api':          '/addons/jqhm/hmscript.cgi',
-                        'protocol':     'http',
-                        'debug':        false
+var hmReady = false,
+    settings = {},
+    hmObjects = [],
+    refreshScript = '',
+    methods = {
+        connect : function ( options ) {
+            console.log("connect");
+            if (hmReady) {
+                $.error( 'jQuery.homematic already connected!' );
+                return false;
+            }
+            if (settings == undefined) {
+                settings = $.extend({
+                    'ccu':          undefined,
+                    'api':          '/addons/jqhm/hmscript.cgi',
+                    'protocol':     'http',
+                    'user':         undefined,
+                    'password':     undefined,
+                    'debug':        false,
+                    'regaDown':     function () {
+
+                    },
+                    'regaUp':       function () {
+
+                    },
+                    'ccuUnreachable':      function () {
+
+                    }
+                }, options);
+
+                if (options.debug) { console.log("jqhomematic: debug"); }
+                if (settings.ccu) {
+                    settings.url = settings.protocol + "://" + settings.ccu + settings.api;
+                } else {
+                    settings.url = settings.api;
+                }
+            }
+            buildRefreshScript();
+            hmReady = true;
+        },
+        init : function( options ) {
+            console.log("init");
+            homematicReady = true;
+
+
+            this.each(function() {
+
+                    var obj = $(this);
+                    var element = $.extend({
+                        'obj':          obj,
+                        tag :           obj.prop( 'tagName' ),
+                        type :          obj.attr( 'type' ),
+                        id :            obj.attr( 'data-hm-id' ),
+                        wid :           obj.attr( 'data-hm-workingid' ),
+                        refresh :       true
                     }, options);
 
-                    if (options.debug) { console.log("jqhomematic: debug"); }
-                    if (settings.ccu) {
-                        settings.url = settings.protocol + "://" + settings.ccu + settings.api;
-                    } else {
-                        settings.url = settings.api;
+                    if ( element.id > 0 ) {
+                        hmObjects.push(element);
+                        buildRefreshScript();
                     }
+
+            });
+            console.log(hmObjects);
+            return this;
+
+        },
+        script: function (script, success, error) {
+            if (settings.debug) {
+                console.log(script);
+            }
+            $.ajax({
+                url: settings.url,
+                type: "POST",
+                dataType: "text",
+                data: script,
+                success: success,
+                error: error
+            });
+        },
+        state: function(id, value) {
+            methods.script("dom.GetObject("+id+").State("+value+");");
+        },
+        checkrega: function(success, error) {
+            var url = "/ise/checkrega.cgi";
+            if (settings.ccu) {
+                url = settings.protocol + "://" + settings.ccu + url;
+            }
+            $.ajax({
+                url: url,
+                success: function(data) {
+                    if (data == "OK") {
+                        success();
+                    } else {
+                        error(data);
+                    }
+                },
+                error: function(a, b, c) {
+                    error();
                 }
-                buildRefreshScript();
-            },
-            init : function( options ) {
-                console.log("init");
-                homematicReady = true;
-
-
-                this.each(function() {
-
-                        var obj = $(this);
-                        var element = $.extend({
-                            'obj':          obj,
-                            tag :           obj.prop( 'tagName' ),
-                            type :          obj.attr( 'type' ),
-                            id :            obj.attr( 'data-hm-id' ),
-                            wid :           obj.attr( 'data-hm-wid' ),
-                            value :         obj.attr( 'data-hm-value' ),
-                            refresh :       true
-                        }, options);
-
-                        if ( element.id > 0 ) {
-
-                            hmObjects.push(element);
-                            buildRefreshScript();
-
-                        }
-
-
-
-                });
-                console.log(hmObjects);
-                return this;
-
-            },
-            script: function (script, success, error) {
-                if (settings.debug) {
-                    console.log(script);
-                }
-                $.ajax({
-                    url: settings.url,
-                    type: "POST",
-                    dataType: "text",
-                    data: script,
-                    success: success,
-                    error: error
-                });
-            },
-            state: function(id, value) {
-                methods.script("dom.GetObject("+id+").State("+value+")");
-            },
-            destroy: function () {
+            });
+        },
+        destroy: function () {
             return this.each(function() {
-                $(this).find("*[data-hm-id]").each(function () {
-                    var element =   $(this),
-                        tag =       element.prop('tagName'),
-                        type,
-                        id =        element.attr("data-hm-id"),
-                        value =     element.attr("data-hm-value");
-                    console.log(" hm-id=" + id);
-                });
+
             });
         }
     };
@@ -108,9 +131,36 @@
         for (var i = 0; i < hmObjects.length; i++) {
             DPs["hm"+hmObjects[i].id] = hmObjects[i];
         }
-        for (var key in DPs) {
 
+        refreshScript = 'object o;\nobject w;\nWrite("[");\n';
+
+        var first = true;
+        for (var key in DPs) {
+            if (DPs[key].refresh) {
+                if (DPs[key].wid > 0) {
+                    refreshScript += 'w = dom.GetObject(' + DPs[key].wid + ');\n';
+                    refreshScript += 'if (w.Value() == false) {\n';
+                }
+
+                if (!first) {
+                    refreshScript += '  WriteLine(",");\n';
+                } else {
+                    first = false;
+                }
+
+                refreshScript += '  o = dom.GetObject(' + DPs[key].id + ');\n';
+                refreshScript += '  Write("{\\"id\\":\\"' + DPs[key].id + '\\",\\"val\\":\\"");\n';
+                refreshScript += '  WriteURL(o.Value());\n  Write("\\"}");\n';
+
+                if (DPs[key].wid > 0) {
+                    refreshScript += '}\n';
+                }
+
+            }
         }
+
+        refreshScript += 'Write("]");';
+        console.log(refreshScript);
     }
 
     var hmUpdate = function(elements) {

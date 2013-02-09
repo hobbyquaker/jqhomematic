@@ -4,8 +4,7 @@ jQuery HomeMatic Plugin
 
 Verwendung
 ==========
-Das Plugin benötigt zum Zugriff auf das HomeMatic-System eine Zusatzsoftware auf der CCU. Hierzu über die Systemsteuerung-Zusatzsoftware jqhm_1.0.tar.gz installieren. Achtung: Diese Zusatzsoftware eröffnet jedem der Zugriff auf Port 80 (http) der CCU hat die Möglichkeit HomeMatic-Scripte ohne weitere Authentifizierung durchzuführen.
-
+Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI": https://github.com/hobbyquaker/WebAPI
 
 
 ```html

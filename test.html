@@ -11,8 +11,9 @@
     $(document).ready(function () {
 
         $.fn.homematic("connect", {
-            ccu : "172.16.23.3"
+                    ccu : "172.16.23.3"
         });
+        $.fn.homematic("checkrega");
 
         $("*[data-hm-id]").homematic();
 
@@ -31,6 +32,7 @@
 <body>
 
 <input name="test-sysvar1" type="text" data-hm-id="1844"/>
+<input name="test-dimmer" type="text" data-hm-id="7908" data-hm-workingid="7912"/>
 
 <select name="test-select" data-hm-id="950">
     <option value="1">eins</option>
