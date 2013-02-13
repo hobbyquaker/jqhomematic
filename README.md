@@ -2,7 +2,7 @@
 
 
 
-## Verwendung
+### Verwendung
 
 Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI": https://github.com/hobbyquaker/WebAPI
 
@@ -25,14 +25,14 @@ $.fn.homematic("connect", {
 });
 ```
 
-## Optionen
+### Optionen
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | | | |
 
 
-## Events
+### Events
 
 | Event     | Beschreibung   |
 | --------- | ------------- |
@@ -44,7 +44,7 @@ $.fn.homematic("connect", {
 | ccuUnreachable | | |
 
 
-## Methoden
+### Methoden
 
 | Methode    | Beschreibung   |
 | --------- | ------------- |
@@ -56,7 +56,7 @@ $.fn.homematic("connect", {
 | start | Automatische Updates starten |
 | script | Ein Script ausführen, erwartet das Script als Parameter |
 
-## Optionen
+### Optionen
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
@@ -66,7 +66,7 @@ $.fn.homematic("connect", {
 | type | "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
 
 
-## Connect Optionen
+### Connect Optionen
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
@@ -75,7 +75,7 @@ $.fn.homematic("connect", {
 | debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
 
 
-## Data-Attribute
+### Data-Attribute
 
 | Attribut    | Beschreibung   |
 | --------- | ------------- |
