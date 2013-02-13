@@ -23,15 +23,14 @@ var hmReady = false,
     refreshScript = '',
     methods = {
         connect : function ( options ) {
-            console.log("connect");
+            console.log('connect');
             if (hmReady) {
                 $.error( 'jQuery.homematic already connected!' );
                 return false;
             }
-            if (settings == undefined) {
                 settings = $.extend({
                     'ccu':          undefined,
-                    'api':          '/addons/jqhm/hmscript.cgi',
+                    'api':          '/addons/webapi/',
                     'protocol':     'http',
                     'user':         undefined,
                     'password':     undefined,
@@ -47,18 +46,17 @@ var hmReady = false,
                     }
                 }, options);
 
-                if (options.debug) { console.log("jqhomematic: debug"); }
                 if (settings.ccu) {
-                    settings.url = settings.protocol + "://" + settings.ccu + settings.api;
+                    settings.url = settings.protocol + '://' + settings.ccu + settings.api;
                 } else {
                     settings.url = settings.api;
                 }
-            }
+
             buildRefreshScript();
             hmReady = true;
         },
         init : function( options ) {
-            console.log("init");
+            console.log('init');
             homematicReady = true;
 
 
@@ -88,30 +86,38 @@ var hmReady = false,
             if (settings.debug) {
                 console.log(script);
             }
+            var url = settings.url + 'hmscript.cgi?content=plain';
+            if (settings.session) {
+                url += '&session=' + settings.session;
+            }
             $.ajax({
-                url: settings.url,
-                type: "POST",
-                dataType: "text",
+                url: url,
+                type: 'POST',
+                dataType: 'text',
                 data: script,
                 success: success,
                 error: error
             });
         },
         state: function(id, value) {
-            methods.script("dom.GetObject("+id+").State("+value+");");
+            if (value) {
+                methods.script('dom.GetObject('+id+').State('+value+');');
+            } else {
+                methods.script('dom.GetObject('+id+').State();');
+            }
         },
         checkrega: function(success, error) {
-            var url = "/ise/checkrega.cgi";
+            var url = '/addons/webapi/checkrega.cgi';
             if (settings.ccu) {
-                url = settings.protocol + "://" + settings.ccu + url;
+                url = settings.protocol + '://' + settings.ccu + url;
             }
             $.ajax({
                 url: url,
                 success: function(data) {
-                    if (data == "OK") {
-                        success();
+                    if (data == 'OK') {
+                        if (success) { success(); }
                     } else {
-                        error(data);
+                        if (error) { error(data); }
                     }
                 },
                 error: function(a, b, c) {
@@ -129,7 +135,7 @@ var hmReady = false,
     var buildRefreshScript = function () {
         var DPs = {};
         for (var i = 0; i < hmObjects.length; i++) {
-            DPs["hm"+hmObjects[i].id] = hmObjects[i];
+            DPs['hm'+hmObjects[i].id] = hmObjects[i];
         }
 
         refreshScript = 'object o;\nobject w;\nWrite("[");\n';
@@ -143,13 +149,13 @@ var hmReady = false,
                 }
 
                 if (!first) {
-                    refreshScript += '  WriteLine(",");\n';
+                    refreshScript += '  WriteLine(',');\n';
                 } else {
                     first = false;
                 }
 
                 refreshScript += '  o = dom.GetObject(' + DPs[key].id + ');\n';
-                refreshScript += '  Write("{\\"id\\":\\"' + DPs[key].id + '\\",\\"val\\":\\"");\n';
+                refreshScript += '  Write("{\\"id\\":\\"' + DPs[key].id + '\\",\\"val\\"":\\"");\n';
                 refreshScript += '  WriteURL(o.Value());\n  Write("\\"}");\n';
 
                 if (DPs[key].wid > 0) {
@@ -163,18 +169,6 @@ var hmReady = false,
         console.log(refreshScript);
     }
 
-    var hmUpdate = function(elements) {
-        if (elements === undefined) {
-            elements = rootElements;
-        }
-
-    }
-
-    var hmAddObject = function (id) {
-        if (!hmObjects["hm"+id]) {
-            hmObjects["hm"+id] = {};
-        }
-    };
 
 
     $.fn.homematic = function( method ) {
