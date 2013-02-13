@@ -1,9 +1,9 @@
-jQuery HomeMatic Plugin
-=======================
+# jQuery HomeMatic Plugin
 
 
-Verwendung
-==========
+
+## Verwendung
+
 Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI": https://github.com/hobbyquaker/WebAPI
 
 
@@ -12,13 +12,12 @@ Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI
 <script type="text/javascript" src="jqhomematic.min.js"></script>
 
 <input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
+<input id="test-input" name="test-sysvar2" type="text" data-hm-id="22222"/>
 ```
 
 ```javascript
-$("#test-input").homematic();
-
-$("#test-input").change(function() {
-  $.fn.homematic("state", $(this).val());
+$("*[data-hm-id]").homematic().change(function() {
+  $.fn.homematic("state", $(this).attr("data-hm-id"), $(this).val());
 });
 
 $.fn.homematic("connect", {
@@ -26,24 +25,26 @@ $.fn.homematic("connect", {
 });
 ```
 
-Optionen
-========
+## Optionen
+
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | | | |
 
 
-Events
-======
+## Events
+
 | Event     | Beschreibung   |
 | --------- | ------------- |
-| initcomplete          | Wird aufgerufen sobald sich das HomeMatic Plugin vollständig initialisiert hat              |
-| updatestart          | Wird aufgerufen wenn eine Update-Anfrage an die CCU gestellt wird              |
-| updatedone          | Wird aufgerufen wenn eine Update-Anfrage von der CCU beantwortet wurde              |
+| initComplete          | Wird aufgerufen sobald sich das HomeMatic Plugin vollständig initialisiert hat              |
+| updateStart          | Wird aufgerufen wenn eine Update-Anfrage an die CCU gestellt wird              |
+| updateDone          | Wird aufgerufen wenn eine Update-Anfrage von der CCU beantwortet wurde              |
+| regaDown | | |
+| regaUp | | |
+| ccuUnreachable | | |
 
 
-Methoden
-========
+## Methoden
 
 | Methode    | Beschreibung   |
 | --------- | ------------- |
@@ -55,33 +56,38 @@ Methoden
 | start | Automatische Updates starten |
 | script | Ein Script ausführen, erwartet das Script als Parameter |
 
-Connect Optionen
-----------------
+## Optionen
+
+| Option    | Beschreibung   | Default   |
+| --------- | ------------- | --------- |
+| formatter | | |
+| id | Die ID eines Datenpunkts | data-hm-id |
+| wid | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
+| type | "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
+
+
+## Connect Optionen
+
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | ccu       | IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
 | updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
-| autoStart | Automatische Updates durchführen | true |
-| formatter | Funktion zum Formatieren der Werte, erhält den Wert als Parameter | undefined |
 | debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
 
 
-Data-Attribute
-==============
+## Data-Attribute
+
 | Attribut    | Beschreibung   |
 | --------- | ------------- |
 | data-hm-id | Die ID eines Datenpunkts |
 | data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) |
 | data-hm-type | "PROGRAM" - Angabe nur notwendig bei Programmen |
-| data-hm-value | |
 
-Roadmap
-=======
+# Roadmap
 * API Alternativ mit Authentifizierung anbieten
 
 
-Copyright, Lizenz, Bedingungen
-==============================
+# Copyright, Lizenz, Bedingungen
 
 jQuery HomeMatic Plugin
 
