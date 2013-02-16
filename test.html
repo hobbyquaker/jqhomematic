@@ -13,9 +13,11 @@
         $.fn.homematic("connect", {
                     ccu : "172.16.23.3"
         });
-        $.fn.homematic("checkrega");
+       // $.fn.homematic("checkrega");
 
-        $("*[data-hm-id]").homematic();
+        $("*[data-hm-id]").homematic().change(function () {
+            $.fn.homematic("state", $(this).attr("data-hm-id"), $(this).val());
+        });
 
         /*
         $.fn.homematic('script', 'object o = dom.GetObject("Licht Ankleide").DPByHssDP("LEVEL");\nWrite(o.Value());', function(data) {
@@ -32,7 +34,7 @@
 <body>
 
 <input name="test-sysvar1" type="text" data-hm-id="1844"/>
-<input name="test-dimmer" type="text" data-hm-id="7908" data-hm-workingid="7912"/>
+<input name="test-dimmer" type="text" value="" data-hm-id="1871" data-hm-workingid="1872"/>
 
 <select name="test-select" data-hm-id="950">
     <option value="1">eins</option>

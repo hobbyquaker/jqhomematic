@@ -15,7 +15,7 @@
  */
 
 
-(function ($) {
+;(function ($) {
 
 var hmReady = false,
     settings = {},
@@ -56,29 +56,39 @@ var hmReady = false,
             hmReady = true;
         },
         init : function( options ) {
-            console.log('init');
-            homematicReady = true;
 
 
             this.each(function() {
 
-                    var obj = $(this);
-                    var element = $.extend({
-                        'obj':          obj,
-                        tag :           obj.prop( 'tagName' ),
-                        type :          obj.attr( 'type' ),
-                        id :            obj.attr( 'data-hm-id' ),
-                        wid :           obj.attr( 'data-hm-workingid' ),
-                        refresh :       true
-                    }, options);
 
-                    if ( element.id > 0 ) {
-                        hmObjects.push(element);
-                        buildRefreshScript();
-                    }
+                var $this = $(this),
+                    data = $this.data('homematic');
+
+                // If the plugin hasn't been initialized yet
+                if ( ! data ) {
+
+                    /*
+                     Do more setup stuff here
+                     */
+
+                    $(this).data('homematic', {
+                        id: $this.attr("data-hm-id"),
+                        wid: $this.attr("data-hm-workingid")
+                    });
+
+
+
+
+                } else {
+                    $.error("homematic init Element wurde bereits initialisiert.");
+                }
+
+
+
+
 
             });
-            console.log(hmObjects);
+            buildRefreshScript();
             return this;
 
         },
@@ -106,6 +116,7 @@ var hmReady = false,
                 methods.script('dom.GetObject('+id+').State();');
             }
         },
+        run: function(id) {},
         checkrega: function(success, error) {
             var url = '/addons/webapi/checkrega.cgi';
             if (settings.ccu) {
@@ -132,15 +143,27 @@ var hmReady = false,
         }
     };
 
+    var bindEvent = function () {
+
+    };
+
     var buildRefreshScript = function () {
         var DPs = {};
-        for (var i = 0; i < hmObjects.length; i++) {
-            DPs['hm'+hmObjects[i].id] = hmObjects[i];
-        }
+
+
+
+        $('*[data-hm-id]').each(function () {
+console.log($(this).attr("data-hm-id"));
+        });
+
+        //for (var i = 0; i < hmObjects.length; i++) {
+        //    DPs['hm'+hmObjects[i].id] = hmObjects[i];
+        //}
 
         refreshScript = 'object o;\nobject w;\nWrite("[");\n';
 
         var first = true;
+
         for (var key in DPs) {
             if (DPs[key].refresh) {
                 if (DPs[key].wid > 0) {

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>jqhomematic kendoui test</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2012.2.710/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2012.2.710/styles/kendo.black.min.css">
+
+    <style type="text/css">
+
+        .dimmer {
+
+        }
+        td {
+            width: 80px;
+        }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdn.kendostatic.com/2012.2.710/js/kendo.all.min.js"></script>
+    <script type="text/javascript" src="jqhomematic.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+           $(".dimmer").kendoSlider({
+               orientation: "vertical",
+               max: 100,
+               min: 0,
+               smallStep: 5,
+               largeStep: 5,
+               tickPlacement: 'none',
+               showButtons: false,
+               slide: function (e) {
+                   console.log(e.value);
+               }
+           });
+        });
+    </script>
+
+    </head>
+    <body class="k-content">
+    <table>
+        <tr>
+            <td><div class="dimmer"></div></td>
+            <td><div class="dimmer"></div></td>
+            <td><div class="dimmer"></div></td>
+            <td><div class="dimmer"></div></td>
+        </tr>
+    </table>
+    </body>
+</html>
