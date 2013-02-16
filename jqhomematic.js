@@ -17,43 +17,38 @@
 
 ;(function ($) {
 
-var hmReady = false,
+var connected = false,
     settings = {},
-    hmObjects = [],
+    cache = [],
     refreshScript = '',
     methods = {
         connect : function ( options ) {
-            console.log('connect');
-            if (hmReady) {
+            if (connected) {
                 $.error( 'jQuery.homematic already connected!' );
                 return false;
             }
-                settings = $.extend({
-                    'ccu':          undefined,
-                    'api':          '/addons/webapi/',
-                    'protocol':     'http',
-                    'user':         undefined,
-                    'password':     undefined,
-                    'debug':        false,
-                    'regaDown':     function () {
 
-                    },
-                    'regaUp':       function () {
+            settings = $.extend({
+                'ccu':              undefined,
+                'api':              '/addons/webapi/',
+                'protocol':         'http',
+                'user':             undefined,
+                'password':         undefined,
+                'debug':            false,
+                'regaDown':         function () { },
+                'regaUp':           function () { },
+                'ccuUnreachable':   function () { }
+            }, options);
 
-                    },
-                    'ccuUnreachable':      function () {
-
-                    }
-                }, options);
-
-                if (settings.ccu) {
-                    settings.url = settings.protocol + '://' + settings.ccu + settings.api;
-                } else {
-                    settings.url = settings.api;
-                }
+            if (settings.ccu) {
+                settings.url = settings.protocol + '://' + settings.ccu + settings.api;
+            } else {
+                settings.url = settings.api;
+            }
 
             buildRefreshScript();
-            hmReady = true;
+            refreshData(refreshUI);
+            connected = true;
         },
         init : function( options ) {
 
@@ -63,7 +58,6 @@ var hmReady = false,
 
                 var $this = $(this),
                     data = $this.data('homematic');
-
                 // If the plugin hasn't been initialized yet
                 if ( ! data ) {
 
@@ -73,9 +67,10 @@ var hmReady = false,
 
                     $(this).data('homematic', {
                         id: $this.attr("data-hm-id"),
-                        wid: $this.attr("data-hm-workingid")
+                        wid: $this.attr("data-hm-wid"),
+                        type: $this.attr("data-hm-type"),
+                        refresh: true
                     });
-
 
 
 
@@ -88,7 +83,6 @@ var hmReady = false,
 
 
             });
-            buildRefreshScript();
             return this;
 
         },
@@ -116,7 +110,7 @@ var hmReady = false,
                 methods.script('dom.GetObject('+id+').State();');
             }
         },
-        run: function(id) {},
+        runprogram: function(id) {},
         checkrega: function(success, error) {
             var url = '/addons/webapi/checkrega.cgi';
             if (settings.ccu) {
@@ -150,21 +144,20 @@ var hmReady = false,
     var buildRefreshScript = function () {
         var DPs = {};
 
-
-
         $('*[data-hm-id]').each(function () {
-console.log($(this).attr("data-hm-id"));
+
+            var data = $(this).data('homematic');
+            DPs['hm'+data.id] = data;
         });
 
-        //for (var i = 0; i < hmObjects.length; i++) {
-        //    DPs['hm'+hmObjects[i].id] = hmObjects[i];
-        //}
 
-        refreshScript = 'object o;\nobject w;\nWrite("[");\n';
+
+        refreshScript = 'object o;\nobject w;\nWrite("{");\n';
 
         var first = true;
 
         for (var key in DPs) {
+
             if (DPs[key].refresh) {
                 if (DPs[key].wid > 0) {
                     refreshScript += 'w = dom.GetObject(' + DPs[key].wid + ');\n';
@@ -172,14 +165,18 @@ console.log($(this).attr("data-hm-id"));
                 }
 
                 if (!first) {
-                    refreshScript += '  WriteLine(',');\n';
+                    refreshScript += 'WriteLine(",");\n';
                 } else {
                     first = false;
                 }
 
-                refreshScript += '  o = dom.GetObject(' + DPs[key].id + ');\n';
-                refreshScript += '  Write("{\\"id\\":\\"' + DPs[key].id + '\\",\\"val\\"":\\"");\n';
-                refreshScript += '  WriteURL(o.Value());\n  Write("\\"}");\n';
+                refreshScript += 'o = dom.GetObject(' + DPs[key].id + ');\n';
+                refreshScript += 'Write("\\"hm' + DPs[key].id + '\\":{\\"id\\":\\"'+DPs[key].id+'\\",");\n';
+                if (DPs[key].type !== "PROGRAM") {
+                    refreshScript += 'Write("\\"val\\":\\"");\n';
+                    refreshScript += 'WriteURL(o.Value());\nWrite("\\",");\n';
+                }
+                refreshScript += 'Write("\\"timestamp\\":\\"" # o.Timestamp() # "\\"}");\n';
 
                 if (DPs[key].wid > 0) {
                     refreshScript += '}\n';
@@ -188,10 +185,35 @@ console.log($(this).attr("data-hm-id"));
             }
         }
 
-        refreshScript += 'Write("]");';
-        console.log(refreshScript);
+        refreshScript += 'Write("}");';
+       // console.log(refreshScript);
     }
 
+    var refreshData= function (success) {
+        var url = settings.url + 'hmscript.cgi?content=json';
+        if (settings.session) {
+            url += '&session=' + settings.session;
+        }
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: refreshScript,
+            success: function (data) {
+                cache = data;
+                if (success) { success(data); }
+            }
+
+            // Todo error handling
+        });
+    }
+
+    var refreshUI = function (data) {
+        if (!data) { data = cache; }
+        for (var key in data) {
+            $("*[data-hm-id='"+data[key].id+"']").val(data[key].val);
+        }
+    }
 
 
     $.fn.homematic = function( method ) {

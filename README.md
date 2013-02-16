@@ -29,7 +29,11 @@ $.fn.homematic("connect", {
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
-| | | |
+| formatter | | |
+| id | Die ID eines Datenpunkts | data-hm-id |
+| wid | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
+| type | "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
+
 
 
 ## Events
@@ -56,23 +60,14 @@ $.fn.homematic("connect", {
 | start | Automatische Updates starten |
 | script | Ein Script ausführen, erwartet das Script als Parameter |
 
-## Optionen
 
-| Option    | Beschreibung   | Default   |
-| --------- | ------------- | --------- |
-| formatter | | |
-| id | Die ID eines Datenpunkts | data-hm-id |
-| wid | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
-| type | "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
-
-
-## Connect Optionen
+## Optionen der Methode connect
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | ccu       | string - IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
 | update          | bool - automatische Updates aller sichtbaren Datenpunkte             | true          |
-| interval          | integer - Intervall der automatischen Updates in Millisekunden              | 3000          |
+| interval          | integer - Intervall der automatischen Updates in Millisekunden              | 5000          |
 | dynamic          | bool - Dynamische Update-Intervalle verwenden              | true          |
 | dynamicFactor          | integer - Berechnungsfaktor für dynamische Update-Intervalle. Höhere Werte für seltenere Updates (geringere Belastung der CCU), niedrigere Werte für häufige Updates (höhere Belastung der CCU)             | 4          |
 | debug     | bool - CCU-Kommunikation in Browser-Console ausgeben | false |
@@ -83,7 +78,7 @@ $.fn.homematic("connect", {
 | Attribut    | Beschreibung   |
 | --------- | ------------- |
 | data-hm-id | Die ID eines Datenpunkts |
-| data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) |
+| data-hm-wid | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) |
 | data-hm-type | "PROGRAM" - Angabe nur notwendig bei Programmen |
 
 ## Roadmap

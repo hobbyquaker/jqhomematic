@@ -10,13 +10,13 @@
 (function ($) {
     $(document).ready(function () {
 
-        $.fn.homematic("connect", {
-                    ccu : "172.16.23.3"
-        });
-       // $.fn.homematic("checkrega");
+         // $.fn.homematic("checkrega");
 
         $("*[data-hm-id]").homematic().change(function () {
             $.fn.homematic("state", $(this).attr("data-hm-id"), $(this).val());
+        });
+        $.fn.homematic("connect", {
+            ccu : "172.16.23.3"
         });
 
         /*
@@ -34,6 +34,7 @@
 <body>
 
 <input name="test-sysvar1" type="text" data-hm-id="1844"/>
+<input name="test-sysvar2" type="text" data-hm-id="1844"/>
 <input name="test-dimmer" type="text" value="" data-hm-id="1871" data-hm-workingid="1872"/>
 
 <select name="test-select" data-hm-id="950">
