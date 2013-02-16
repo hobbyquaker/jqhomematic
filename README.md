@@ -29,10 +29,11 @@ $.fn.homematic("connect", {
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
-| formatter | | |
-| id | Die ID eines Datenpunkts | data-hm-id |
-| wid | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
-| type | "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
+| id | integer - Die ID eines Datenpunkts | data-hm-id |
+| wid | integer - Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
+| type | string - "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
+| event | bool - Event-Bindings automatisch durchführen | true |
+| formatter | function - Funktion zum Formatieren des Werts nach einem Update | function(val) { return val; } |
 
 
 
@@ -66,6 +67,8 @@ $.fn.homematic("connect", {
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | ccu       | string - IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
+| protocol       | string - Protokoll             | "http"          |
+| api       | string - Pfad zur WebAPI (mit abschließendem Slash!)          | "/addons/webapi/"          |
 | update          | bool - automatische Updates aller sichtbaren Datenpunkte             | true          |
 | interval          | integer - Intervall der automatischen Updates in Millisekunden              | 5000          |
 | dynamic          | bool - Dynamische Update-Intervalle verwenden              | true          |
