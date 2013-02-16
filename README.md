@@ -86,11 +86,11 @@ $.fn.homematic("connect", {
 | data-hm-working | Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) |
 | data-hm-type | "PROGRAM" - Angabe nur notwendig bei Programmen |
 
-# Roadmap
+## Roadmap
 * WebAPI-Variante mit Authentifizerung unterstützen
 
 
-# Copyright, Lizenz, Bedingungen
+## Copyright, Lizenz, Bedingungen
 
 jQuery HomeMatic Plugin
 
