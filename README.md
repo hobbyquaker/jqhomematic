@@ -4,7 +4,7 @@
 
 ### Verwendung
 
-Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI": https://github.com/hobbyquaker/WebAPI
+Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI" in der Variante ohne Authentifizierung: https://github.com/hobbyquaker/WebAPI
 
 
 ```html
@@ -48,7 +48,7 @@ $.fn.homematic("connect", {
 
 | Methode    | Beschreibung   |
 | --------- | ------------- |
-| connect | |
+| connect | Verbindung zur HomeMatic CCU aufbauen und automatische Updates starten |
 | set          | Einen Homematic-Datenpunkt setzen, erwartet zwei Parameter: die ID und den Wert               |
 | update          | Ein Update aller Werte anstoßen          |
 | destroy   | Plugin entfernen, automatische Updates werden angehalten, alle Event-Handler werden entfernt  |
@@ -70,9 +70,12 @@ $.fn.homematic("connect", {
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
-| ccu       | IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
-| updateInterval          | Intervall der automatischen Updates in Millisekunden              | 3000          |
-| debug     | CCU-Kommunikation in Browser-Console ausgeben | false |
+| ccu       | string - IP-Adresse oder Hostname der CCU (kann entfallen wenn die Webseite auf der CCU selbst installiert ist)             | undefined          |
+| update          | bool - automatische Updates aller sichtbaren Datenpunkte             | true          |
+| interval          | integer - Intervall der automatischen Updates in Millisekunden              | 3000          |
+| dynamic          | bool - Dynamische Update-Intervalle verwenden              | true          |
+| dynamicFactor          | integer - Berechnungsfaktor für dynamische Update-Intervalle. Höhere Werte für seltenere Updates (geringere Belastung der CCU), niedrigere Werte für häufige Updates (höhere Belastung der CCU)             | 4          |
+| debug     | bool - CCU-Kommunikation in Browser-Console ausgeben | false |
 
 
 ### Data-Attribute
@@ -84,7 +87,7 @@ $.fn.homematic("connect", {
 | data-hm-type | "PROGRAM" - Angabe nur notwendig bei Programmen |
 
 # Roadmap
-* API Alternativ mit Authentifizierung anbieten
+* WebAPI-Variante mit Authentifizerung unterstützen
 
 
 # Copyright, Lizenz, Bedingungen
