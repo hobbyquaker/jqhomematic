@@ -1,29 +1,28 @@
 # jQuery HomeMatic Plugin
 
 
-
 ## Verwendung
 
 Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI" in der Variante ohne Authentifizierung: https://github.com/hobbyquaker/WebAPI
 
 
+### Beispiel 1
+
+Dieses Beispiel verbindet ein Input-Feld mit der Homematic-Variable mit der id 12345. Änderungen werden automatisch an die Homematic CCU gesendet (Change-Event), Änderungen auf der CCU werden automatisch im UI aktualisiert.
+
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="jqhomematic.min.js"></script>
+<script type="text/javascript" src="jqhomematic.js"></script>
+<script type="text/javascript">
+	$("#test-input").homematic();
 
+	$.fn.homematic("connect", {
+		ccu: '192.168.1.99'
+	});
+</script>
 <input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
-<input id="test-input" name="test-sysvar2" type="text" data-hm-id="22222"/>
 ```
 
-```javascript
-$("*[data-hm-id]").homematic().change(function() {
-  $.fn.homematic("state", $(this).attr("data-hm-id"), $(this).val());
-});
-
-$.fn.homematic("connect", {
-  ccu: '192.168.1.99'
-});
-```
 
 ## Optionen
 
