@@ -16,11 +16,10 @@ Dieses Beispiel verbindet ein Input-Feld mit der Homematic-Variable mit der id 1
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="jqhomematic.js"></script>
 <script type="text/javascript">
-	$("#test-input").homematic();
 
-	$.homematic("init", {
-		ccu: '192.168.1.99'
-	});
+	$("#test-input").homematic();
+	$.homematic({ ccu: '192.168.1.99' });
+
 </script>
 Datenpunkt 12345: <input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
 ```
@@ -46,7 +45,20 @@ $("#test-input").homematic({
 });
 ```
 
-## Optionen
+
+
+
+
+
+## Methoden
+
+| Methode    | Beschreibung   |
+| --------- | ------------- |
+| init | Ein DOM-Element mit der HomeMatic "verbinden" |
+| destroy | |
+
+
+## Optionen der Methode init
 
 Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, data-hm-wid und data-hm-type auch direkt im DOM-Element gesetzt werden. 
 
@@ -59,18 +71,6 @@ Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, d
 | formatter | function - Funktion zum Formatieren des Werts nach einem Update | function(val) { return val; } |
 
 
-
-## Events
-
-| Event     | Beschreibung   |
-| --------- | ------------- |
-| initComplete          | Wird aufgerufen sobald sich das HomeMatic Plugin vollständig initialisiert hat              |
-| updateStart          | Wird aufgerufen wenn eine Update-Anfrage an die CCU gestellt wird              |
-| updateDone          | Wird aufgerufen wenn eine Update-Anfrage von der CCU beantwortet wurde              |
-| regaDown | | |
-| regaUp | | |
-| ccuUnreachable | | |
-
 ## Funktionen
 
 | Funktion    | Beschreibung   |
@@ -80,6 +80,9 @@ Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, d
 | runprogram | Ein Homematic-Programm starten. Erwartet die ID des Programms als Parameter
 | script | Ein Script ausführen, erwartet das Script und eine Callback-Funktion als Parameter |
 | checkrega | Überprüfen ob die Logikschicht bereit ist. Erwartet eine success und eine error Callback-Funktion als Parameter |
+| stop | Automatischen Refresh stoppen |
+| start | Automatischen Refresh starten |
+| refresh | einmaligen Refresh durchführen | 
 
 ## Optionen der Funktion init
 
@@ -94,6 +97,16 @@ Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, d
 | dynamicFactor          | integer - Berechnungsfaktor für dynamische Update-Intervalle. Höhere Werte für seltenere Updates (geringere Belastung der CCU), niedrigere Werte für häufige Updates (höhere Belastung der CCU)             | 4          |
 | debug     | bool - CCU-Kommunikation in Browser-Console ausgeben | false |
 
+## Events
+
+| Event     | Beschreibung   |
+| --------- | ------------- |
+| initComplete          | Wird aufgerufen sobald sich das HomeMatic Plugin vollständig initialisiert hat              |
+| updateStart          | Wird aufgerufen wenn eine Update-Anfrage an die CCU gestellt wird              |
+| updateDone          | Wird aufgerufen wenn eine Update-Anfrage von der CCU beantwortet wurde              |
+| regaDown | | |
+| regaUp | | |
+| ccuUnreachable | | |
 
 ## Data-Attribute
 
