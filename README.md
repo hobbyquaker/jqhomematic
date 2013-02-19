@@ -5,33 +5,57 @@
 
 Das Plugin benötigt zum Zugriff auf die HomeMatic-CCU die Zusatzsoftware "WebAPI" in der Variante ohne Authentifizierung: https://github.com/hobbyquaker/WebAPI
 
+Um die für die Konfiguration notwendigen IDs nachzuschauen bietet sich das HQ WebUI an: https://github.com/hobbyquaker/hq-webui
 
-### Beispiel 1
+Achtung - dieses Plugin befindet sich noch in einem sehr frühen Entwicklungsstadium, es werden noch keinerlei Fehler abgefangen. Man sollte daher aufpassen nur IDs zu verwenden die auch tatsächlich auf der CCU vorhanden sind, sonst kann durch gehäufte Homematic-Script-Fehler die CCU-Stabilität beeinträchtigt werden.
 
-Dieses Beispiel verbindet ein Input-Feld mit der Homematic-Variable mit der id 12345. Änderungen werden automatisch an die Homematic CCU gesendet (Change-Event), Änderungen auf der CCU werden automatisch im UI aktualisiert.
+### Beispiel
 
+Dieses Beispiel verbindet ein Input-Feld mit der Homematic-Variable mit der id 12345. Änderungen werden automatisch an die Homematic CCU gesendet (Change-Event), Änderungen auf der CCU werden automatisch im UI aktualisiert. 
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="jqhomematic.js"></script>
 <script type="text/javascript">
 	$("#test-input").homematic();
 
-	$.fn.homematic("connect", {
+	$.homematic("init", {
 		ccu: '192.168.1.99'
 	});
 </script>
-<input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
+Datenpunkt 12345: <input id="test-input" name="test-sysvar1" type="text" data-hm-id="12345"/>
 ```
 
+### Formatieren von Werten
+
+```javascript
+$("#test-input").homematic({
+	formatter: function(val) {
+		val = val * 100;
+		val = val.toFixed(2) + "%";
+		return val;
+	}
+});
+```
+
+### Button um ein Programm zu starten
+```html
+<button id="test-button" data-hm-id="654321" data-hm-type="PROGRAM">Programm 654321 starten</button>
+<script type="text/javascript">
+	$("#test-button").homematic();
+</script>
+});
+```
 
 ## Optionen
+
+Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, data-hm-wid und data-hm-type auch direkt im DOM-Element gesetzt werden. 
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |
 | id | integer - Die ID eines Datenpunkts | data-hm-id |
 | wid | integer - Die ID des korrespondierenden WORKING-Datenpunkts. Angabe ist optional. Wird ein WORKING-Datenpunkt angegeben werden keine Werte aktualisert solange WORKING true ist (verhindert springende Slider bei DIMMER/SHUTTER) | data-hm-working |
 | type | string - "PROGRAM" - Angabe nur notwendig bei Programmen | data-hm-type |
-| event | bool - Event-Bindings automatisch durchführen | true |
+| event | bool - OnChange Event-Bindings automatisch durchführen | true |
 | formatter | function - Funktion zum Formatieren des Werts nach einem Update | function(val) { return val; } |
 
 
@@ -47,21 +71,17 @@ Dieses Beispiel verbindet ein Input-Feld mit der Homematic-Variable mit der id 1
 | regaUp | | |
 | ccuUnreachable | | |
 
+## Funktionen
 
-## Methoden
-
-| Methode    | Beschreibung   |
+| Funktion    | Beschreibung   |
 | --------- | ------------- |
-| connect | Verbindung zur HomeMatic CCU aufbauen und automatische Updates starten |
-| set          | Einen Homematic-Datenpunkt setzen, erwartet zwei Parameter: die ID und den Wert               |
-| update          | Ein Update aller Werte anstoßen          |
-| destroy   | Plugin entfernen, automatische Updates werden angehalten, alle Event-Handler werden entfernt  |
-| stop | Automatische Updates stoppen |
-| start | Automatische Updates starten |
-| script | Ein Script ausführen, erwartet das Script als Parameter |
+| init | Verbindung zur HomeMatic CCU aufbauen und automatische Updates starten |
+| state          | Einen Homematic-Datenpunkt setzen, erwartet zwei Parameter: die ID und den Wert               |
+| runprogram | Ein Homematic-Programm starten. Erwartet die ID des Programms als Parameter
+| script | Ein Script ausführen, erwartet das Script und eine Callback-Funktion als Parameter |
+| checkrega | Überprüfen ob die Logikschicht bereit ist. Erwartet eine success und eine error Callback-Funktion als Parameter |
 
-
-## Optionen der Methode connect
+## Optionen der Funktion init
 
 | Option    | Beschreibung   | Default   |
 | --------- | ------------- | --------- |

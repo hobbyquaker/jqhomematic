@@ -17,12 +17,13 @@
 
 ;(function ($) {
 
-var connected = false,
+var version = '0.5',
+    connected = false,
     settings = {},
     cache = [],
     refreshScript = '',
-    methods = {
-        connect : function ( options ) {
+    funcs = {
+        init : function ( options ) {
             if (connected) {
                 $.error( 'jQuery.homematic already connected!' );
                 return false;
@@ -50,42 +51,6 @@ var connected = false,
             refreshData(refreshUI);
             connected = true;
         },
-        init : function( options ) {
-
-
-            this.each(function() {
-
-
-                var $this = $(this),
-                    data = $this.data('homematic');
-                // If the plugin hasn't been initialized yet
-                if ( ! data ) {
-
-                    /*
-                     Do more setup stuff here
-                     */
-
-                    $(this).data('homematic', {
-                        id: $this.attr("data-hm-id"),
-                        wid: $this.attr("data-hm-wid"),
-                        type: $this.attr("data-hm-type"),
-                        refresh: true
-                    });
-
-
-
-                } else {
-                    $.error("homematic init Element wurde bereits initialisiert.");
-                }
-
-
-
-
-
-            });
-            return this;
-
-        },
         script: function (script, success, error) {
             if (settings.debug) {
                 console.log(script);
@@ -106,8 +71,6 @@ var connected = false,
         state: function(id, value) {
             if (value) {
                 methods.script('dom.GetObject('+id+').State('+value+');');
-            } else {
-                methods.script('dom.GetObject('+id+').State();');
             }
         },
         runprogram: function(id) {},
@@ -129,6 +92,35 @@ var connected = false,
                     error();
                 }
             });
+        }
+
+    },
+    methods = {
+
+        init : function( options ) {
+            this.each(function() {
+                var $this = $(this),
+                    data = $this.data('homematic');
+                // If the plugin hasn't been initialized yet
+                if ( ! data ) {
+
+                    var objectData = $.extend({
+                        'id':               $this.attr("data-hm-id"),
+                        'wid':              $this.attr("data-hm-wid"),
+                        'type':             $this.attr("data-hm-type"),
+                        'refresh':          true
+
+                    }, options);
+
+                    $(this).data('homematic', objectData).attr("data-hm-id", objectData.id);
+
+                } else {
+                    $.error("homematic init Element wurde bereits initialisiert.");
+                }
+
+            });
+            return this;
+
         },
         destroy: function () {
             return this.each(function() {
@@ -209,9 +201,16 @@ var connected = false,
     }
 
     var refreshUI = function (data) {
-        if (!data) { data = cache; }
+        if (!data) {
+            data = cache;
+        }
         for (var key in data) {
-            $("*[data-hm-id='"+data[key].id+"']").val(data[key].val);
+            var val = data[key].val;
+            if (data[key].formatter) {
+                val = data[key].formatter(val);
+            }
+            // Todo SELECT, CHECKBOX, RADIO?
+            $("*[data-hm-id='"+data[key].id+"']").val(val);
         }
     }
 
@@ -226,8 +225,14 @@ var connected = false,
         }
     }
 
-
-
-
+    $.homematic = function( func ) {
+        if ( funcs[func] ) {
+            return funcs[ func ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+        } else if ( typeof func === 'object' || ! func ) {
+            return funcs.init.apply( this, arguments );
+        } else {
+            $.error( 'Function ' +  func + ' does not exist on jQuery.homematic' );
+        } 
+    }
 
 })(jQuery);
