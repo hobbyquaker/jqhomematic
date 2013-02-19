@@ -17,7 +17,7 @@
 
 ;(function ($) {
 
-var version = '0.5',
+var version = '0.6',
     connected = false,
     settings = {},
     cache = [],
