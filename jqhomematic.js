@@ -35,6 +35,10 @@ var version = '0.5',
                 'protocol':         'http',
                 'user':             undefined,
                 'password':         undefined,
+                'autoRefresh':      true,
+                'interval':         3000,
+                'dynamic':          true,
+                'dynamicFactor':    7,
                 'debug':            false,
                 'regaDown':         function () { },
                 'regaUp':           function () { },
@@ -52,9 +56,7 @@ var version = '0.5',
             connected = true;
         },
         script: function (script, success, error) {
-            if (settings.debug) {
-                console.log(script);
-            }
+            debug(script);
             var url = settings.url + 'hmscript.cgi?content=plain';
             if (settings.session) {
                 url += '&session=' + settings.session;
@@ -70,11 +72,13 @@ var version = '0.5',
         },
         state: function(id, value) {
             if (value) {
-                methods.script('dom.GetObject('+id+').State('+value+');');
+                funcs.script('dom.GetObject('+id+').State('+value+');');
             }
         },
-        runprogram: function(id) {},
-        checkrega: function(success, error) {
+        runProgram: function(id) {
+            funcs.script('dom.GetObject('+id+').RunProgram();');
+        },
+        checkRega: function(success, error) {
             var url = '/addons/webapi/checkrega.cgi';
             if (settings.ccu) {
                 url = settings.protocol + '://' + settings.ccu + url;
@@ -96,7 +100,6 @@ var version = '0.5',
 
     },
     methods = {
-
         init : function( options ) {
             this.each(function() {
                 var $this = $(this),
@@ -181,11 +184,12 @@ var version = '0.5',
        // console.log(refreshScript);
     }
 
-    var refreshData= function (success) {
+    var refreshData = function (success) {
         var url = settings.url + 'hmscript.cgi?content=json';
         if (settings.session) {
             url += '&session=' + settings.session;
         }
+        debug(refreshScript);
         $.ajax({
             url: url,
             type: 'POST',
@@ -193,7 +197,13 @@ var version = '0.5',
             data: refreshScript,
             success: function (data) {
                 cache = data;
-                if (success) { success(data); }
+                debug(data);
+                if (settings.autoRefresh) {
+                    setTimeout(function() {
+                        refreshData(refreshUI);
+                    }, settings.interval);
+                }
+                if (success) { success(); }
             }
 
             // Todo error handling
@@ -206,14 +216,23 @@ var version = '0.5',
         }
         for (var key in data) {
             var val = data[key].val;
-            if (data[key].formatter) {
-                val = data[key].formatter(val);
-            }
             // Todo SELECT, CHECKBOX, RADIO?
-            $("*[data-hm-id='"+data[key].id+"']").val(val);
+            $("input[data-hm-id='"+data[key].id+"']").each(function() {
+                if ($(this).data('homematic').formatter) {
+                    $(this).val($(this).data('homematic').formatter(data[key].val));
+                } else {
+                    $(this).val(data[key].val);
+                }
+            });
+
         }
     }
 
+    var debug = function (val) {
+        if (settings.debug) {
+            console.log(val);
+        }
+    }
 
     $.fn.homematic = function( method ) {
         if ( methods[method] ) {

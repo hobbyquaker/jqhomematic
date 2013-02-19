@@ -7,25 +7,27 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="jqhomematic.js"></script>
     <script type="text/javascript">
+
 (function ($) {
+
     $(document).ready(function () {
 
-         // $.fn.homematic("checkrega");
-
-        $("*[data-hm-id]").homematic().change(function () {
-            $.fn.homematic("state", $(this).attr("data-hm-id"), $(this).val());
-        });
-        $.fn.homematic("connect", {
-            ccu : "172.16.23.3"
+        $("input[data-hm-id]").homematic().change(function () {
+            $.homematic("state", $(this).attr("data-hm-id"), $(this).val());
         });
 
-        /*
-        $.fn.homematic('script', 'object o = dom.GetObject("Licht Ankleide").DPByHssDP("LEVEL");\nWrite(o.Value());', function(data) {
-            alert(data);
+        $("select[data-hm-id]").homematic().change(function() {
+            //var id = $(this).attr("data-hm-id")
+            //$.homematic("state", id, $("select[data-hm-id='" + id + "'] option:selected").val());
+            $.homematic("state", $(this).attr("data-hm-id"), $(this).find("option:selected").val());
         });
-        */
+
+        $.homematic({
+            ccu:    "172.16.23.3"
+        });
 
     });
+
 })(jQuery);
 
     </script>
@@ -34,12 +36,13 @@
 <body>
 
 <input name="test-sysvar1" type="text" data-hm-id="1844"/>
-<input name="test-sysvar2" type="text" data-hm-id="1844"/>
 <input name="test-dimmer" type="text" value="" data-hm-id="1871" data-hm-workingid="1872"/>
 
 <select name="test-select" data-hm-id="950">
-    <option value="1">eins</option>
-    <option value="2">zwei</option>
+    <option value="0">Anwesend</option>
+    <option value="1">Schlafend</option>
+    <option value="2">Abwesend</option>
+    <option value="3">Urlaub</option>
 </select>
 </body>
 </html>
