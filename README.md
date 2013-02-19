@@ -129,14 +129,10 @@ Die Optionen id, wid und type können über die HTML5 Data Attribute data-hm-id, d
 
 jQuery HomeMatic Plugin
 
-Copyright (c) 2013 hobbyquaker https://github.com/hobbyquaker
+Die Nutzung dieser Software erfolgt auf eigenes Risiko. Der Author dieser Software kann für eventuell auftretende Folgeschäden nicht haftbar gemacht werden!
 
-This software is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License Version 3 as published by the Free Software Foundation.
+© 2013 hobbyquaker https://github.com/hobbyquaker
 
-http://www.gnu.org/licenses/gpl.html
+Diese Software ist freie Software. Sie können sie unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, gemäß Version 3 der Lizenz. Die Veröffentlichung dieser Software erfolgt in der Hoffnung, daß sie Ihnen von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.
 
-deutsche Übersetzung: http://www.gnu.de/documents/gpl.de.html
-
-Please keep this Readme File when redistributing this Software!
-
-This software comes without any warranty, use it at your own risk!
+HomeMatic und das HomeMatic Logo sind eingetragene Warenzeichen der eQ-3 AG
